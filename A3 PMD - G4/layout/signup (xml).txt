@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/green">
+
+    <!-- ScrollView: Allows vertical scrolling for the content inside, helpful for smaller screen sizes -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <!-- Main RelativeLayout: Contains all UI elements, with padding for spacing -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Title TextView: Displays the app name in large, bold font -->
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="BudgetBuddy"
+                android:textColor="@color/black"
+                android:textSize="45sp"
+                android:textStyle="bold" />
+
+            <!-- Subtitle TextView: Provides a tagline for the app below the title -->
+            <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="Helping you to stay on track, \none expense at a time!"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <!-- Sign Up TextView: Prompts the user to sign up, displayed below the subtitle -->
+            <TextView
+                android:id="@+id/signupText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/subtitleText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:text="S I G N    U P"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!-- Name input field: Collects the user's full name -->
+            <EditText
+                android:id="@+id/nameInput"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/signupText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:padding="12dp" />
+
+            <!-- Email input field: Collects the user's email address -->
+            <EditText
+                android:id="@+id/emailInput"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameInput"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="12dp" />
+
+            <!-- Password input field: Collects the user's password -->
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emailInput"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="12dp" />
+
+            <!-- Confirm password input field: Asks the user to re-enter their password for confirmation -->
+            <EditText
+                android:id="@+id/cfmPasswordInput"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/passwordInput"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:padding="12dp" />
+
+            <!-- Sign up button: Submits the sign-up form -->
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cfmPasswordInput"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="34dp"
+                android:backgroundTint="@color/dgreen"
+                android:paddingVertical="8dp"
+                android:text="Sign Up"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <!-- Register prompt: Displays a message to users who already have an account -->
+            <TextView
+                android:id="@+id/registerPrompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/signUpButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="Already registered? Click here to login."
+                android:textColor="@color/black" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

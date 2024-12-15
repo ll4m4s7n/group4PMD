@@ -1,0 +1,79 @@
+plugins {
+    // Applying the Android application plugin, which provides necessary tasks and configurations for building an Android app.
+    alias(libs.plugins.android.application)
+    
+    // Applying the Google services plugin for integrating Firebase and other Google services into the app.
+    id("com.google.gms.google-services")
+}
+
+android {
+    // Setting the namespace for the app (unique identifier).
+    namespace = "com.example.budgetbuddy"
+    
+    // Defining the compile SDK version (the version of Android SDK used to compile the app).
+    compileSdk = 34
+
+    defaultConfig {
+        // Defining the application's unique ID (used by the Play Store).
+        applicationId = "com.example.budgetbuddy"
+        
+        // Minimum SDK version the app supports.
+        minSdk = 24
+        
+        // Target SDK version, the version of Android the app is optimized for.
+        targetSdk = 34
+        
+        // Version code for the app (used by the Play Store for updates).
+        versionCode = 1
+        
+        // Version name shown to users.
+        versionName = "1.0"
+
+        // Defining the instrumentation runner for testing.
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            // Disabling code minification for the release build.
+            isMinifyEnabled = false
+            
+            // Specifying ProGuard files for release build obfuscation and optimization.
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    compileOptions {
+        // Setting Java version compatibility for the project.
+        sourceCompatibility = JavaVersion.VERSION_1_9
+        targetCompatibility = JavaVersion.VERSION_1_9
+    }
+}
+
+dependencies {
+    // Android app dependencies.
+    implementation(libs.appcompat)  // AppCompat library for backward-compatible UI components.
+    implementation(libs.material)   // Material design components for modern UI.
+    implementation(libs.activity)   // Activity components for managing app activities.
+    implementation(libs.constraintlayout)  // ConstraintLayout for flexible layouts.
+    
+    // Unit testing dependencies.
+    testImplementation(libs.junit)  // JUnit for unit testing.
+    
+    // Android test dependencies.
+    androidTestImplementation(libs.ext.junit)  // JUnit extensions for Android testing.
+    androidTestImplementation(libs.espresso.core)  // Espresso for UI testing.
+
+    // Firebase dependencies.
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))  // Firebase BOM to manage Firebase dependencies' versions.
+    implementation("com.google.firebase:firebase-auth-ktx")  // Firebase Authentication for user login and authentication.
+    implementation("com.google.firebase:firebase-firestore-ktx")  // Firebase Firestore for cloud database.
+    implementation("com.google.firebase:firebase-database-ktx")  // Firebase Realtime Database for cloud storage.
+    implementation("com.google.android.material:material:1.4.0")  // Material design components for UI.
+
+    // Firebase Analytics for tracking app usage and events.
+    implementation("com.google.firebase:firebase-analytics-ktx")
+}

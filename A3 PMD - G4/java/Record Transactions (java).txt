@@ -1,0 +1,109 @@
+package com.example.budgetbuddy;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class RecordTransactions extends AppCompatActivity {
+
+    // Tag for logging purposes
+    private static final String TAG = "RecordTransactions";
+
+    // Firebase Firestore and Authentication instances
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
+    // User ID of the authenticated user
+    private String userId;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.record_transactions); // Set the layout for the activity
+
+        // Initialize Firebase Firestore and FirebaseAuth instances
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
+        // Check if the user is authenticated
+        if (mAuth.getCurrentUser() != null) {
+            userId = mAuth.getCurrentUser().getUid(); // Get the user's unique ID
+        } else {
+            // If user is not authenticated, show a message and close the activity
+            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // Link UI components to their XML layout counterparts
+        EditText amountEditText = findViewById(R.id.Mcontent);
+        EditText descriptionEditText = findViewById(R.id.Dcontent2);
+        Button saveButton = findViewById(R.id.saveTransaction);
+        Button cancelButton = findViewById(R.id.cancelTransaction);
+
+        // Get the transaction type passed through the intent
+        String transactionType = getIntent().getStringExtra("transactionType");
+
+        // Set click listener for the save button
+        saveButton.setOnClickListener(v -> {
+            // Get the entered amount and description
+            String amountStr = amountEditText.getText().toString();
+            String description = descriptionEditText.getText().toString();
+
+            // Validate the inputs
+            if (amountStr.isEmpty() || description.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    // Parse the amount to a double and submit the transaction
+                    double amount = Double.parseDouble(amountStr);
+                    submitTransaction(amount, description, transactionType);
+                } catch (NumberFormatException e) {
+                    // Handle invalid amount format
+                    Toast.makeText(this, "Invalid amount format", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Set click listener for the cancel button
+        cancelButton.setOnClickListener(v -> {
+            Log.d(TAG, "Cancel button clicked"); // Log the cancel action
+            setResult(RESULT_CANCELED); // Set the result as canceled
+            finish(); // Close the activity
+        });
+    }
+
+    // Method to submit the transaction to Firestore
+    private void submitTransaction(double amount, String description, String type) {
+        // Create a map of transaction data
+        Map<String, Object> transactionData = new HashMap<>();
+        transactionData.put("amount", amount);
+        transactionData.put("description", description);
+        transactionData.put("type", type);
+        transactionData.put("timestamp", System.currentTimeMillis()); // Add a timestamp
+
+        // Save the transaction data to the user's Firestore collection
+        db.collection("users").document(userId).collection("transactions")
+                .add(transactionData)
+                .addOnSuccessListener(documentReference -> {
+                    // Log success and show a success message
+                    Log.d(TAG, "Transaction added with ID: " + documentReference.getId());
+                    Toast.makeText(RecordTransactions.this, "Transaction recorded successfully", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK); // Set the result as successful
+                    finish(); // Close the activity
+                })
+                .addOnFailureListener(e -> {
+                    // Log failure and show an error message
+                    Log.w(TAG, "Error adding transaction", e);
+                    Toast.makeText(RecordTransactions.this, "Error recording transaction", Toast.LENGTH_SHORT).show();
+                });
+    }
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Defines the color black with hexadecimal value #FF000000 -->
+    <color name="black">#FF000000</color>
+
+    <!-- Defines the color white with hexadecimal value #FFFFFFFF -->
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Defines the color green with hexadecimal value #53BDA5 -->
+    <color name="green">#53BDA5</color>
+
+    <!-- Defines the color gray with hexadecimal value #71797E -->
+    <color name="gray">#71797E</color>
+
+    <!-- Defines a darker green color with hexadecimal value #097969 -->
+    <color name="dgreen">#097969</color>
+
+    <!-- Defines the color red with hexadecimal value #FF0000 -->
+    <color name="red">#FF0000</color>
+
+    <!-- Defines a forest green color with hexadecimal value #355E3B -->
+    <color name="fgreen">#355E3B</color>
+
+    <!-- Defines the color ash with hexadecimal value #E5E4E2 -->
+    <color name="ash">#E5E4E2</color>
+
+    <!-- Defines the color blue with hexadecimal value #5D9BDD -->
+    <color name="blue">#5D9BDD</color>
+
+    <!-- Defines a pinkish red color with hexadecimal value #EF5F5F -->
+    <color name="pred">#EF5F5F</color>
+
+</resources>

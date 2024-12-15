@@ -1,0 +1,7 @@
+<resources>
+    <!-- Defines the app's name as "BudgetBuddy" -->
+    <string name="app_name">BudgetBuddy</string>
+
+    <!-- Placeholder for the default web client ID (no value assigned yet) -->
+    <string name="default_web_client_id" />
+</resources>

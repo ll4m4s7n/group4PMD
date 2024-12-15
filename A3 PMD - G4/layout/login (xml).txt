@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"  <!-- Layout width takes up the full parent width -->
+    android:layout_height="match_parent" <!-- Layout height takes up the full parent height -->
+    android:background="@color/green"> <!-- Background color set to green -->
+
+    <!-- ScrollView to enable scrolling of the content -->
+    <ScrollView
+        android:layout_width="match_parent" <!-- ScrollView width takes up full parent width -->
+        android:layout_height="wrap_content" <!-- ScrollView height adjusts to fit content -->
+        android:layout_centerInParent="true"> <!-- Centers the ScrollView in parent layout -->
+
+        <RelativeLayout
+            android:layout_width="match_parent" <!-- RelativeLayout width takes up full parent width -->
+            android:layout_height="wrap_content" <!-- RelativeLayout height adjusts to fit content -->
+            android:padding="16dp"> <!-- Adds padding inside the layout -->
+
+            <!-- ImageView for the app logo -->
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="255dp" <!-- Sets width of the logo image -->
+                android:layout_height="124dp" <!-- Sets height of the logo image -->
+                android:layout_centerHorizontal="true" <!-- Centers the logo horizontally -->
+                android:contentDescription="Budget Buddy Logo" <!-- Content description for accessibility -->
+                android:src="@drawable/bb_logo" /> <!-- Logo image source -->
+
+            <!-- TextView for the app title -->
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content" <!-- Width adjusts to text content -->
+                android:layout_height="wrap_content" <!-- Height adjusts to text content -->
+                android:layout_below="@id/logoImage" <!-- Positions below the logo image -->
+                android:layout_centerHorizontal="true" <!-- Centers the text horizontally -->
+                android:layout_marginTop="16dp" <!-- Adds margin above the title text -->
+                android:text="BudgetBuddy" <!-- Text displayed for the app title -->
+                android:textColor="@color/black" <!-- Text color set to black -->
+                android:textSize="45sp" <!-- Sets text size -->
+                android:textStyle="bold" /> <!-- Sets text style to bold -->
+
+            <!-- TextView for the app subtitle -->
+            <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="Helping you to stay on track, \none expense at a time!" <!-- Subtitle text -->
+                android:textAlignment="center" <!-- Centers the subtitle text -->
+                android:textColor="@color/black"
+                android:textSize="16sp" /> <!-- Subtitle text size -->
+
+            <!-- TextView for login prompt -->
+            <TextView
+                android:id="@+id/loginText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/subtitleText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:text="L O G I N" <!-- Text displayed as login prompt -->
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!-- EditText for email input -->
+            <EditText
+                android:id="@+id/emailInput"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/loginText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:hint="Email" <!-- Hint text for email input -->
+                android:inputType="textEmailAddress" <!-- Specifies email format input -->
+                android:padding="12dp" /> <!-- Adds padding inside the input field -->
+
+            <!-- EditText for password input -->
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emailInput"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:hint="Password" <!-- Hint text for password input -->
+                android:inputType="textPassword" <!-- Specifies password input format -->
+                android:padding="12dp" /> <!-- Adds padding inside the input field -->
+
+            <!-- Button for sign-in -->
+            <Button
+                android:id="@+id/signInButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/passwordInput"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/dgreen" <!-- Button background color -->
+                android:padding="12dp"
+                android:text="Sign In" <!-- Button text -->
+                android:textColor="@color/white" /> <!-- Button text color -->
+
+            <!-- TextView for sign-up prompt -->
+            <TextView
+                android:id="@+id/signUpPrompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/signInButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="New user? Click here to sign up" <!-- Sign-up prompt text -->
+                android:textColor="@color/black" /> <!-- Sign-up text color -->
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

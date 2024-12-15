@@ -1,0 +1,352 @@
+package com.example.budgetbuddy;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+public class TransactionHistory extends AppCompatActivity {
+
+    private static final String TAG = "TransactionHistory"; // For logging purposes
+    private Spinner accountSpinner; // Dropdown for account selection
+    private TextView balanceTextView, incomeTextView, expenseTextView, calendarTextView, transactionsTextView; // UI components for displaying data
+    private ImageButton prevMonthButton, nextMonthButton, budgetOverviewButton; // Navigation buttons for month view
+    private FloatingActionButton mainFab, incomeFab, expenseFab, transferFab, cancelFab; // FAB buttons for actions
+    private FirebaseFirestore db; // Firestore database instance
+    private FirebaseAuth mAuth; // Firebase authentication instance
+    private String userId; // User ID for Firebase queries
+    private Calendar currentMonth; // Current month for transaction filtering
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: Starting TransactionHistory activity");
+        try {
+            setContentView(R.layout.transaction_history); // Set the layout for this activity
+            Log.d(TAG, "onCreate: Content view set successfully");
+
+            // Initialize Firebase
+            db = FirebaseFirestore.getInstance(); // Get Firestore instance
+            mAuth = FirebaseAuth.getInstance(); // Get FirebaseAuth instance
+            if (mAuth.getCurrentUser() == null) { // If the user is not logged in
+                Log.d(TAG, "onCreate: User not logged in, redirecting to Login");
+                startActivity(new Intent(this, Login.class)); // Redirect to login screen
+                finish(); // Finish this activity
+                return;
+            }
+            userId = mAuth.getCurrentUser().getUid(); // Get the current user's UID
+            Log.d(TAG, "onCreate: User ID retrieved: " + userId);
+
+            initializeViews(); // Initialize UI components
+            setupAccountSpinner(); // Set up account selection spinner
+            currentMonth = Calendar.getInstance(); // Set the current month
+            updateCalendarDisplay(); // Update the calendar view
+            setClickListeners(); // Set up click listeners for buttons
+            loadAccountData(); // Load account data from Firestore
+            loadTransactions(); // Load transaction data from Firestore
+
+            Log.d(TAG, "onCreate: TransactionHistory setup completed");
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: Error setting up TransactionHistory", e); // Log errors if any
+            Toast.makeText(this, "Error setting up Transaction History", Toast.LENGTH_LONG).show(); // Show error message
+            finish(); // Finish activity if error occurs
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: TransactionHistory resumed");
+        loadAccountData(); // Reload account data when activity resumes
+        loadTransactions(); // Reload transaction data when activity resumes
+    }
+
+    private void initializeViews() {
+        Log.d(TAG, "initializeViews: Starting to initialize views");
+        try {
+            // Initialize UI components
+            accountSpinner = findViewById(R.id.spinner);
+            balanceTextView = findViewById(R.id.money);
+            incomeTextView = findViewById(R.id.Imoney);
+            expenseTextView = findViewById(R.id.Emoney);
+            calendarTextView = findViewById(R.id.calendar);
+            transactionsTextView = findViewById(R.id.data);
+            prevMonthButton = findViewById(R.id.imageButton5);
+            nextMonthButton = findViewById(R.id.imageButton6);
+            budgetOverviewButton = findViewById(R.id.imageButton10);
+            mainFab = findViewById(R.id.floatingActionButton);
+            cancelFab = findViewById(R.id.floatingCancelButton);
+            incomeFab = findViewById(R.id.floatingIncomeButton);
+            expenseFab = findViewById(R.id.floatingExpenseButton);
+            transferFab = findViewById(R.id.floatingTransferButton);
+
+            // Initially hide the additional FABs
+            cancelFab.hide();
+            incomeFab.hide();
+            expenseFab.hide();
+            transferFab.hide();
+            Log.d(TAG, "initializeViews: Views initialized successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "initializeViews: Error initializing views", e); // Log any initialization errors
+            throw e; // Rethrow to be caught in onCreate
+        }
+    }
+}
+
+    // Method to set up the account spinner and load account data from Firebase
+    private void setupAccountSpinner() {
+        Log.d(TAG, "setupAccountSpinner: Setting up account spinner");
+        try {
+            // Fetch account data from Firebase
+            db.collection("users").document(userId).collection("accounts")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<String> accountNames = new ArrayList<>();
+                        // Loop through the fetched documents to extract account names
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            accountNames.add(document.getString("name"));
+                        }
+                        // If no accounts found, add a placeholder
+                        if (accountNames.isEmpty()) {
+                            accountNames.add("No accounts");
+                        }
+                        // Set up the spinner with the account names
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, accountNames);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        accountSpinner.setAdapter(adapter);
+                        accountSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                // Load account data and transactions when a selection is made
+                                loadAccountData();
+                                loadTransactions();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {}
+                        });
+                        Log.d(TAG, "setupAccountSpinner: Account spinner setup completed");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "setupAccountSpinner: Error loading accounts", e);
+                        Toast.makeText(this, "Failed to load accounts", Toast.LENGTH_SHORT).show();
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, "setupAccountSpinner: Error setting up account spinner", e);
+            Toast.makeText(this, "Error setting up accounts", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Method to set up click listeners for various buttons
+    private void setClickListeners() {
+        Log.d(TAG, "setClickListeners: Setting click listeners");
+        try {
+            // Set listeners for the buttons
+            prevMonthButton.setOnClickListener(v -> changeMonth(-1));  // Move to the previous month
+            nextMonthButton.setOnClickListener(v -> changeMonth(1));   // Move to the next month
+            mainFab.setOnClickListener(v -> toggleFabMenu());           // Show/hide FAB menu
+            cancelFab.setOnClickListener(v -> toggleFabMenu());        // Hide FAB menu when cancel is clicked
+            incomeFab.setOnClickListener(v -> navigateToRecordTransaction("Income"));  // Navigate to record income
+            expenseFab.setOnClickListener(v -> navigateToRecordTransaction("Expense"));  // Navigate to record expense
+            transferFab.setOnClickListener(v -> navigateToRecordTransaction("Transfer"));  // Navigate to record transfer
+            Log.d(TAG, "setClickListeners: Click listeners set successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "setClickListeners: Error setting click listeners", e);
+            Toast.makeText(this, "Error setting up buttons", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Method to load account data (balance) based on selected account
+    private void loadAccountData() {
+        Log.d(TAG, "loadAccountData: Loading account data");
+        try {
+            String selectedAccount = accountSpinner.getSelectedItem().toString();
+            // If no account is selected, display 0.00
+            if ("No accounts".equals(selectedAccount)) {
+                balanceTextView.setText("RM 0.00");
+                return;
+            }
+            // Fetch account balance from Firebase
+            db.collection("users").document(userId).collection("accounts").document(selectedAccount)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            double balance = documentSnapshot.getDouble("balance");
+                            balanceTextView.setText(String.format(Locale.getDefault(), "RM %.2f", balance));
+                            Log.d(TAG, "loadAccountData: Account data loaded successfully");
+                        } else {
+                            balanceTextView.setText("RM 0.00");
+                            Log.d(TAG, "loadAccountData: No account data found");
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "loadAccountData: Error loading account data", e);
+                        Toast.makeText(this, "Failed to load account data", Toast.LENGTH_SHORT).show();
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, "loadAccountData: Error in loadAccountData", e);
+            Toast.makeText(this, "Error loading account data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Method to load transactions for the selected account in the current month
+    private void loadTransactions() {
+        Log.d(TAG, "loadTransactions: Loading transactions");
+        try {
+            String selectedAccount = accountSpinner.getSelectedItem().toString();
+            // If no account is selected, display a message
+            if ("No accounts".equals(selectedAccount)) {
+                transactionsTextView.setText("No transactions are made yet...");
+                return;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+            String monthYear = sdf.format(currentMonth.getTime());
+
+            // Fetch transactions for the selected account and current month from Firebase
+            db.collection("users").document(userId).collection("transactions")
+                    .whereEqualTo("account", selectedAccount)
+                    .whereEqualTo("monthYear", monthYear)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        double totalIncome = 0;
+                        double totalExpense = 0;
+                        StringBuilder transactionsList = new StringBuilder();
+
+                        // Loop through the transactions and categorize them
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String category = document.getString("category");
+                            double amount = document.getDouble("amount");
+                            String type = document.getString("type");
+
+                            // Add income, expense, or transfer amounts to the total and display
+                            if ("Income".equals(type)) {
+                                totalIncome += amount;
+                                transactionsList.append(String.format(Locale.getDefault(), "%s: +RM %.2f\n", category, amount));
+                            } else if ("Expense".equals(type)) {
+                                totalExpense += amount;
+                                transactionsList.append(String.format(Locale.getDefault(), "%s: -RM %.2f\n", category, amount));
+                            } else if ("Transfer".equals(type)) {
+                                transactionsList.append(String.format(Locale.getDefault(), "%s: RM %.2f\n", category, amount));
+                            }
+                        }
+
+                        // Display total income, expense, and transaction details
+                        incomeTextView.setText(String.format(Locale.getDefault(), "RM %.2f", totalIncome));
+                        expenseTextView.setText(String.format(Locale.getDefault(), "RM %.2f", totalExpense));
+
+                        // Display the list of transactions
+                        if (transactionsList.length() > 0) {
+                            transactionsTextView.setText(transactionsList.toString());
+                        } else {
+                            transactionsTextView.setText("No transactions are made yet...");
+                        }
+                        Log.d(TAG, "loadTransactions: Transactions loaded successfully");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "loadTransactions: Error loading transactions", e);
+                        Toast.makeText(this, "Failed to load transactions", Toast.LENGTH_SHORT).show();
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, "loadTransactions: Error in loadTransactions", e);
+            Toast.makeText(this, "Error loading transactions", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Method to update the calendar display with the current month
+    private void updateCalendarDisplay() {
+        Log.d(TAG, "updateCalendarDisplay: Updating calendar display");
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+            calendarTextView.setText(sdf.format(currentMonth.getTime()));
+            Log.d(TAG, "updateCalendarDisplay: Calendar display updated successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "updateCalendarDisplay: Error updating calendar display", e);
+        }
+    }
+
+    // Method to change the month (either forward or backward)
+    private void changeMonth(int delta) {
+        Log.d(TAG, "changeMonth: Changing month by " + delta);
+        try {
+            currentMonth.add(Calendar.MONTH, delta);  // Adjust the month by delta
+            updateCalendarDisplay();  // Update the calendar display
+            loadTransactions();  // Reload transactions for the new month
+            Log.d(TAG, "changeMonth: Month changed successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "changeMonth: Error changing month", e);
+            Toast.makeText(this, "Error changing month", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Method to toggle the visibility of the FAB menu
+    private void toggleFabMenu() {
+        Log.d(TAG, "toggleFabMenu: Toggling FAB menu");
+        try {
+            if (incomeFab.getVisibility() == View.VISIBLE) {
+                incomeFab.hide();
+                expenseFab.hide();
+                transferFab.hide();
+                cancelFab.hide();
+                mainFab.show();  // Show the main FAB
+            } else {
+                incomeFab.show();
+                expenseFab.show();
+                transferFab.show();
+                cancelFab.show();
+                mainFab.hide();  // Hide the main FAB and show other options
+            }
+            Log.d(TAG, "toggleFabMenu: FAB menu toggled successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "toggleFabMenu: Error toggling FAB menu", e);
+        }
+    }
+
+    // Method to navigate to the transaction recording screen
+    private void navigateToRecordTransaction(String transactionType) {
+        Log.d(TAG, "navigateToRecordTransaction: Navigating to " + transactionType);
+        try {
+            Intent intent = new Intent(MainActivity.this, RecordTransactionActivity.class);
+            intent.putExtra("TRANSACTION_TYPE", transactionType);
+            startActivity(intent);  // Navigate to the transaction recording activity
+        } catch (Exception e) {
+            Log.e(TAG, "navigateToRecordTransaction: Error navigating to record transaction", e);
+        }
+    }
+
+}
+
+    // Override method to handle the result from a previous activity (such as recording a transaction)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check if the result corresponds to the transaction recording request (requestCode = 1)
+        if (requestCode == 1) {
+            // If the transaction was recorded successfully
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "onActivityResult: Transaction recorded successfully");
+                loadAccountData();  // Reload account data (balance)
+                loadTransactions();  // Reload transactions to reflect the new transaction
+            } 
+            // If the transaction recording was cancelled by the user
+            else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "onActivityResult: Transaction recording cancelled");
+            }
+        }
+    }

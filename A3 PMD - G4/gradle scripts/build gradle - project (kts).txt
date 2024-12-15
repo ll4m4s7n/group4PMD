@@ -1,0 +1,15 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    // Applying the Android application plugin (not applied to this module but available for other modules)
+    alias(libs.plugins.android.application) apply false
+    
+    // Applying the Google Services plugin with a specific version, not applied to this module but can be used in other modules
+    id("com.google.gms.google-services") version "4.4.2" apply false
+}
+
+buildscript {
+    dependencies {
+        // Adding the Google services classpath for dependency resolution in the build process
+        classpath(libs.google.services)
+    }
+}

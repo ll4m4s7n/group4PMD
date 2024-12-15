@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecordTransactions">
+
+    <!-- Toolbar: A top bar for navigation and actions, positioned at the bottom with rounded corners -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-1dp"
+        android:background="@drawable/rounded_top_background"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Main title text for the transaction screen -->
+    <TextView
+        android:id="@+id/mainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/materialToolbar"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="94dp"
+        android:padding="16dp"
+        android:text="New Transaction"
+        android:textColor="@android:color/black"
+        android:textSize="23sp"
+        android:textStyle="bold" />
+
+    <!-- Date label for user input, asking for transaction date -->
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mainText"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="15dp"
+        android:text="Date :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for the user to input the date of the transaction -->
+    <EditText
+        android:id="@+id/Dcontent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mainText"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="133dp"
+        android:inputType="datetime"
+        android:textSize="15sp" />
+
+    <!-- Type label for user input, asking for the transaction type -->
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/date"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="115dp"
+        android:text="Type :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for user to input the type of transaction -->
+    <EditText
+        android:id="@+id/Tcontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Dcontent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="63dp"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <!-- Account label for user input, asking for the account related to the transaction -->
+    <TextView
+        android:id="@+id/account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/type"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="91dp"
+        android:text="Account :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for user to input the account related to the transaction -->
+    <EditText
+        android:id="@+id/Acontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Tcontent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="62dp"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <!-- Category label for user input, asking for the category of the transaction -->
+    <TextView
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/account"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="82dp"
+        android:text="Category :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for user to input the category of the transaction -->
+    <EditText
+        android:id="@+id/Ccontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Acontent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="62dp"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <!-- Amount label for user input, asking for the amount of the transaction -->
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/category"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="94dp"
+        android:text="Amount :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for user to input the amount of the transaction -->
+    <EditText
+        android:id="@+id/Mcontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Ccontent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="62dp"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <!-- Note label for user input, asking for additional notes regarding the transaction -->
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/amount"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="120dp"
+        android:text="Note :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for user to input additional notes about the transaction -->
+    <EditText
+        android:id="@+id/Ncontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Mcontent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="62dp"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <!-- Description label for user input, asking for a detailed description of the transaction -->
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/note"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="69dp"
+        android:text="Description :"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EditText for user to input a detailed description of the transaction -->
+    <EditText
+        android:id="@+id/Dcontent2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Ncontent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="62dp"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <!-- Button to save the transaction -->
+    <Button
+        android:id="@+id/saveTransaction"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="47dp"
+        android:layout_marginBottom="73dp"
+        android:backgroundTint="@color/dgreen"
+        android:text="Save"
+        android:textColor="@color/white" />
+
+    <!-- Button to cancel the transaction -->
+    <Button
+        android:id="@+id/cancelTransaction"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginBottom="133dp"
+        android:backgroundTint="@color/dgray"
+        android:text="Cancel"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

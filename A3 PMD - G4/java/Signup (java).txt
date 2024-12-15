@@ -1,0 +1,164 @@
+package com.example.budgetbuddy;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Signup extends AppCompatActivity {
+
+    // UI components
+    private EditText nameInput, emailInput, passwordInput, cfmPasswordInput;
+    private Button signUpButton;
+    private TextView registerPrompt;
+
+    // Firebase authentication and database instances
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.signup); // Set the layout for the signup activity
+
+        // Initialize Firebase Auth and Firestore
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        // Link UI components to their respective views in the layout
+        nameInput = findViewById(R.id.nameInput);
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+        cfmPasswordInput = findViewById(R.id.cfmPasswordInput);
+        signUpButton = findViewById(R.id.signUpButton);
+        registerPrompt = findViewById(R.id.registerPrompt);
+
+        // Set up click listener for the sign-up button
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signUp(); // Handle user registration
+            }
+        });
+
+        // Set up clickable text for redirecting to the login screen
+        setupClickableLoginText();
+    }
+
+    /**
+     * Handles the sign-up process.
+     */
+    private void signUp() {
+        // Get user input
+        final String name = nameInput.getText().toString().trim();
+        final String email = emailInput.getText().toString().trim();
+        String password = passwordInput.getText().toString();
+        String confirmPassword = cfmPasswordInput.getText().toString();
+
+        // Validate user input
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check if passwords match
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(this, "Passwords do not match. Please re-enter.", Toast.LENGTH_SHORT).show();
+            passwordInput.setText(""); // Clear password fields
+            cfmPasswordInput.setText("");
+            return;
+        }
+
+        // Create a new user with email and password in Firebase Authentication
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign-up success: Save user data to Firestore
+                            String userId = mAuth.getCurrentUser().getUid(); // Get the user ID
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("name", name); // Add name to user data
+                            user.put("email", email); // Add email to user data
+
+                            db.collection("users").document(userId)
+                                    .set(user)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                // Successfully saved user data
+                                                Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                                                // Delay for 2 seconds before redirecting to login
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        redirectToLogin(); // Navigate to the login screen
+                                                    }
+                                                }, 2000);
+                                            } else {
+                                                // Error saving user data
+                                                Toast.makeText(Signup.this, "Error saving user data: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            // Sign-up failed: Show error message
+                            Toast.makeText(Signup.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Redirects the user to the login screen.
+     */
+    private void redirectToLogin() {
+        Intent intent = new Intent(Signup.this, Login.class);
+        startActivity(intent); // Start the login activity
+        finish(); // Close the sign-up activity
+    }
+
+    /**
+     * Sets up the "login" text as a clickable span that navigates to the login screen.
+     */
+    private void setupClickableLoginText() {
+        // Create a SpannableString for the register prompt text
+        SpannableString ss = new SpannableString(registerPrompt.getText());
+
+        // Define a clickable span for the "login" text
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                redirectToLogin(); // Navigate to the login screen
+            }
+        };
+
+        // Set the clickable span for the "login" portion of the text
+        ss.setSpan(clickableSpan, ss.length() - 14, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Apply the SpannableString to the TextView and enable movement method for clicks
+        registerPrompt.setText(ss);
+        registerPrompt.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+}

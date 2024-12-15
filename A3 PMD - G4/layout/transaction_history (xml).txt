@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransactionHistory">
+
+    <!-- Main header toolbar with green background -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-19dp"
+        android:layout_marginTop="-8dp"
+        android:background="@color/green"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Secondary toolbar with rounded corners, placed below the first toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar4"
+        android:layout_width="350dp"
+        android:layout_height="290dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="355dp"
+        android:background="@drawable/rounded_corner"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Bottom toolbar with green background for action buttons -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="-9dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/green"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- ImageButton for edit action, placed at the top left corner -->
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="75dp"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginTop="21dp"
+        android:backgroundTint="@color/green"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <!-- ImageButton for search action, placed at the top right corner -->
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="67dp"
+        android:layout_height="72dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="6dp"
+        android:backgroundTint="@color/green"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
+    <!-- Spinner for selecting history option, placed in the center with margins -->
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="92dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="25dp"
+        android:background="@color/white"
+        android:textAlignment="center"
+        android:textSize="12pt"
+        android:text="History"
+        android:textColor="@color/black" />
+
+    <!-- TextView displaying account balance label -->
+    <TextView
+        android:id="@+id/Abalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="86dp"
+        android:layout_marginEnd="119dp"
+        android:text="Account Balance :"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- TextView displaying the account balance value -->
+    <TextView
+        android:id="@+id/money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="121dp"
+        android:layout_marginEnd="105dp"
+        android:text="RM 4,315.95"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+<!-- ImageButton for download icon (styled with custom green color) -->
+<ImageButton
+    android:id="@+id/imageButton3"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginStart="18dp"
+    android:layout_marginTop="173dp"
+    android:backgroundTint="@color/fgreen"
+    app:srcCompat="@android:drawable/stat_sys_download" />
+
+<!-- ImageButton for upload icon (styled with custom red color) -->
+<ImageButton
+    android:id="@+id/imageButton4"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="164dp"
+    android:layout_marginEnd="11dp"
+    android:backgroundTint="@color/red"
+    app:srcCompat="@android:drawable/ic_menu_upload" />
+
+<!-- TextView for "Income" label -->
+<TextView
+    android:id="@+id/income"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginStart="74dp"
+    android:layout_marginTop="171dp"
+    android:text="Income"
+    android:textColor="@color/white" />
+
+<!-- TextView displaying the income amount -->
+<TextView
+    android:id="@+id/Imoney"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginStart="70dp"
+    android:layout_marginTop="193dp"
+    android:text="RM 2,541.00"
+    android:textColor="@color/white"
+    android:textSize="15sp"
+    android:textStyle="bold" />
+
+<!-- TextView for "Expenses" label -->
+<TextView
+    android:id="@+id/expenses"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="172dp"
+    android:layout_marginEnd="72dp"
+    android:text="Expenses"
+    android:textColor="@color/white" />
+
+<!-- TextView displaying the expenses amount -->
+<TextView
+    android:id="@+id/Emoney"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="193dp"
+    android:layout_marginEnd="69dp"
+    android:text="RM 1,573.88"
+    android:textColor="@color/white"
+    android:textSize="15sp"
+    android:textStyle="bold" />
+
+<!-- ImageButton for previous action (navigation or media control) -->
+<ImageButton
+    android:id="@+id/imageButton5"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginStart="39dp"
+    android:layout_marginTop="248dp"
+    app:srcCompat="@android:drawable/ic_media_previous" />
+
+<!-- ImageButton for next action (navigation or media control) -->
+<ImageButton
+    android:id="@+id/imageButton6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="245dp"
+    android:layout_marginEnd="39dp"
+    app:srcCompat="@android:drawable/ic_media_next" />
+
+<!-- TextView for displaying the current month/year -->
+<TextView
+    android:id="@+id/calendar"
+    android:layout_width="155dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="261dp"
+    android:layout_marginStart="119dp"
+    android:layout_marginEnd="119dp"
+    android:text="September 2024"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    android:textSize="18sp"
+    android:textStyle="bold" />
+
+<!-- TextView for "Transactions" section title -->
+<TextView
+    android:id="@+id/overview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginStart="25dp"
+    android:layout_marginTop="309dp"
+    android:text="Transactions"
+    android:textColor="@color/black"
+    android:textSize="18sp"
+    android:textStyle="bold"/>
+
+<!-- TextView for "See All" link to view all transactions -->
+<TextView
+    android:id="@+id/all"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="312dp"
+    android:layout_marginEnd="31dp"
+    android:text="See All"
+    android:textColor="@color/dgreen"
+    android:textSize="18sp"
+    android:textStyle="bold"/>
+
+<!-- ImageButton for home button -->
+<ImageButton
+    android:id="@+id/imageButton7"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="27dp"
+    android:layout_marginBottom="18dp"
+    android:backgroundTint="@color/green"
+    app:srcCompat="@drawable/ic_home_black_24px" />
+
+<!-- ImageButton for dashboard button -->
+<ImageButton
+    android:id="@+id/imageButton8"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="105dp"
+    android:layout_marginBottom="18dp"
+    android:backgroundTint="@color/green"
+    app:srcCompat="@drawable/ic_dashboard_black_24px" />
+
+<!-- ImageButton for view button -->
+<ImageButton
+    android:id="@+id/imageButton9"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="21dp"
+    android:layout_marginBottom="14dp"
+    android:backgroundTint="@color/green"
+    app:srcCompat="@android:drawable/ic_menu_view" />
+
+<!-- ImageButton for settings button -->
+<ImageButton
+    android:id="@+id/imageButton10"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="96dp"
+    android:layout_marginBottom="15dp"
+    android:backgroundTint="@color/green"
+    app:srcCompat="@android:drawable/ic_menu_set_as" />
+
+<!-- TextView for the "Home" label -->
+<TextView
+    android:id="@+id/home"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="32dp"
+    android:layout_marginBottom="7dp"
+    android:text="Home" />
+
+<!-- TextView for the "Transaction" label -->
+<TextView
+    android:id="@+id/transaction"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="94dp"
+    android:layout_marginBottom="8dp"
+    android:text="Transaction" />
+
+<!-- TextView for the "Budget" label -->
+<TextView
+    android:id="@+id/budget"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="103dp"
+    android:layout_marginBottom="6dp"
+    android:text="Budget" />
+
+<!-- TextView for the "Setting" label -->
+<TextView
+    android:id="@+id/setting"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="26dp"
+    android:layout_marginBottom="6dp"
+    android:text="Setting" />
+
+<!-- TextView for the message when there are no transactions -->
+<TextView
+    android:id="@+id/data"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginStart="86dp"
+    android:layout_marginTop="485dp"
+    android:text="No transactions to are made yet...."
+    android:textColor="@color/dgreen"
+    android:textSize="18sp" 
+    android:textStyle="bold/italic" />
+
+<!-- Floating Action Button for adding new item (white background) -->
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingActionButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="175dp"
+    android:layout_marginBottom="40dp"
+    android:backgroundTint="@color/white"
+    android:clickable="true"
+    app:srcCompat="@android:drawable/ic_menu_add" />
+
+<!-- Floating Action Button for cancel action (ash background) -->
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingCancelButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="175dp"
+    android:layout_marginBottom="40dp"
+    android:backgroundTint="@color/ash"
+    android:clickable="true"
+    app:srcCompat="@drawable/round_cancel_24" />
+
+<!-- Floating Action Button for transfer action (blue background) -->
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingTransferButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="175dp"
+    android:layout_marginBottom="120dp"
+    android:backgroundTint="@color/blue"
+    android:clickable="true"
+    app:srcCompat="@drawable/round_compare_arrows_24" />
+
+<!-- Floating Action Button for income action (green background) -->
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingIncomeButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="245dp"
+    android:layout_marginBottom="85dp"
+    android:backgroundTint="@color/green"
+    android:clickable="true"
+    app:srcCompat="@drawable/round_download_24" />
+
+<!-- Floating Action Button for expense action (red background) -->
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingExpenseButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="105dp"
+    android:layout_marginBottom="85dp"
+    android:backgroundTint="@color/pred"
+    android:clickable="true"
+    app:srcCompat="@drawable/round_file_upload_24" />
+
+</RelativeLayout>

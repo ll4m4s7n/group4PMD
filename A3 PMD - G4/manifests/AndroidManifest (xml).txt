@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Declares the app's permission to access the internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true" <!-- Enables app data backup for restoration purposes -->
+        android:dataExtractionRules="@xml/data_extraction_rules" <!-- Specifies rules for data extraction -->
+        android:fullBackupContent="@xml/backup_rules" <!-- Specifies files for backup -->
+        android:icon="@mipmap/ic_launcher" <!-- Sets the app's launcher icon -->
+        android:label="@string/app_name" <!-- Sets the app's display name -->
+        android:roundIcon="@mipmap/ic_launcher_round" <!-- Sets the app's round icon -->
+        android:supportsRtl="true" <!-- Enables support for right-to-left layouts -->
+        android:theme="@style/Theme.BudgetBuddy" <!-- Sets the app's theme -->
+        tools:targetApi="31"> <!-- Specifies the target API level for tools -->
+
+        <!-- Activity for recording transactions, not accessible to other apps -->
+        <activity
+            android:name=".RecordTransactions"
+            android:exported="false" />
+
+        <!-- Activity for viewing transaction history, accessible to other apps -->
+        <activity
+            android:name=".TransactionHistory"
+            android:exported="true">
+            <intent-filter>
+                <!-- Specifies that this activity can handle VIEW actions -->
+                <action android:name="android.intent.action.VIEW" />
+                <!-- Declares this activity as a default one for VIEW actions -->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activity for user login, not accessible to other apps -->
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+
+        <!-- Activity for user signup, accessible to other apps -->
+        <activity
+            android:name=".Signup"
+            android:exported="true">
+            <intent-filter>
+                <!-- Specifies this as the main entry point of the app -->
+                <action android:name="android.intent.action.MAIN" />
+                <!-- Declares this activity as the launcher for the app -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
